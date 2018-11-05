@@ -51,7 +51,6 @@ Make wishlists for holidays, birthdays, etc
 - update
 - get all boards
 - get account info
-<<<<<<< HEAD
 
 -Boards:
 - find/check
@@ -68,5 +67,3 @@ Make wishlists for holidays, birthdays, etc
 - update
 - get all items
 - get info
-=======
->>>>>>> mason
