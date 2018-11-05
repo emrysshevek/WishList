@@ -2,6 +2,7 @@
 Make wishlists for holidays, birthdays, etc
 
 # Database forms:
+``` (json)
 {Users: [
     {
         username: xxx,
@@ -39,6 +40,7 @@ Make wishlists for holidays, birthdays, etc
     }
     ]
 }
+```
 
 # Database operations:
 -Users:
