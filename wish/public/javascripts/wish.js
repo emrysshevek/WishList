@@ -21,7 +21,7 @@ app.controller('MainCtrl', function($scope, $http) {
     $scope.login = function() {
         var url = "/login";
         $http.get(url).then(function(response) {
-
+            console.log(response);
         });
         console.log("logged in");
     }

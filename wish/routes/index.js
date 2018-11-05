@@ -9,7 +9,8 @@ router.get('/', function(req, res, next) {
 
 router.get('/login', function(req, res, next) {
     console.log("In login");
-    res.status(200);
+    response = { response: "logged in" };
+    res.send(response);
 });
 
 router.get('/register', function(req, res, next) {
@@ -17,13 +18,13 @@ router.get('/register', function(req, res, next) {
     res.send("login");
 });
 
-router.get('/find', function(req, res, next) {
+router.get('/find/user', function(req, res, next) {
     console.log("In find");
     res.status(200);
 });
 
-router.get('/home', function(req, res, next) {
-    console.log("In home");
+router.get('/get/board', function(req, res, next) {
+    console.log("In find");
     res.status(200);
 });
 
