@@ -1,7 +1,7 @@
 # WishList
 Make wishlists for holidays, birthdays, etc
 
-# Database forms:
+# Database collections:
 {Users: [
     {
         username: xxx,
@@ -28,15 +28,16 @@ Make wishlists for holidays, birthdays, etc
     }
     ]
 },
-{Items: [
-    {
-        board: boardName,
-        picture: xxx,
-        title: xxx,
-        description: xxx,
-        enabled: t/f,
-        link: xxx
-    }
+{Items: 
+    [
+        {
+            board: boardName,
+            picture: xxx,
+            title: xxx,
+            description: xxx,
+            enabled: t/f,
+            link: xxx
+        }
     ]
 }
 
@@ -48,3 +49,19 @@ Make wishlists for holidays, birthdays, etc
 - update
 - get all boards
 - get account info
+
+-Boards:
+- find/check
+- add
+- delete
+- update
+- get all items
+- get board settings
+
+-Items:
+- find/check
+- add
+- delete
+- update
+- get all items
+- get info
