@@ -1,7 +1,8 @@
 # WishList
 Make wishlists for holidays, birthdays, etc
 
-# Database collections:
+# Database forms:
+``` (json)
 {Users: [
     {
         username: xxx,
@@ -40,6 +41,7 @@ Make wishlists for holidays, birthdays, etc
         }
     ]
 }
+```
 
 # Database operations:
 -Users:
@@ -49,6 +51,7 @@ Make wishlists for holidays, birthdays, etc
 - update
 - get all boards
 - get account info
+<<<<<<< HEAD
 
 -Boards:
 - find/check
@@ -65,3 +68,5 @@ Make wishlists for holidays, birthdays, etc
 - update
 - get all items
 - get info
+=======
+>>>>>>> mason
