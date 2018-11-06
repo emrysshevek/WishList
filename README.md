@@ -67,3 +67,13 @@ Make wishlists for holidays, birthdays, etc
 - update
 - get all items
 - get info
+
+-Routes:
+- /login
+- /register
+- /find/user
+- /find/board
+- /find/item
+- /get/user
+- /get/board
+- /get/item
