@@ -6,3 +6,9 @@ body {
 a {
   color: #00B7FF;
 }
+
+.mainForm {
+  border-radius: 20px;
+  border: 1px solid #68a2ff;
+  padding: 30px;
+}

@@ -19,18 +19,18 @@
 
     <ui-view></ui-view>
 
-    <script type="text/ng-template" id="/main.html">
+    <script type="text/ng-template" id="/login.html">
         <div class="row justify-content-md-center">
-            <div class="login col-md-auto bg-light">
+            <div class="mainForm col-md-auto bg-light">
                 <form id="loginForm">
+                    <h1 class="col">Wish List</h1>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="userName" aria-describedby="userName" placeholder="enter username">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        <input type="text" class="form-control is-valid" id="username" aria-describedby="username" placeholder="enter username" required>
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="enter password">
+                        <input type="password" class="form-control is-valid" id="password" placeholder="enter password" required>
                     </div>
-
+                    <div class="invalid-feedback">Username and/or password are incorrect</div>
                     <div class="row justify-content-md-center">
                         <div class="col-auto">
                             <button ng-click="login()" id="login" type="submit" class="btn btn-primary">log in</button>
@@ -43,10 +43,10 @@
                     </div>
                     <div class="row justify-content-md-center">
                         <div class="col-auto">
-                            <button id="register()" type="submit" class="btn btn-secondary">sign up</button>
+                            <a href="#/register"><button type="button" class="btn btn-secondary">sign up</button></a>
                         </div>
                         <div class="col-auto">
-                            <button id="find()" type="submit" class="btn btn-secondary">find user</button>
+                            <a href="#/search"><button type="button" class="btn btn-secondary">look up</button></a>
                         </div>
                     </div>
                 </form>
@@ -54,8 +54,81 @@
         </div>
     </script>
 
+    <script type="text/ng-template" id="/register.html">
+        <div class="row justify-content-md-center">
+            <div class="mainForm col-md-auto bg-light">
+                <form id="registerForm">
+                    <h1 class="col">Wish List</h1>
+                    <div class="form-group">
+                        <input type="text" class="form-control is-valid" id="username" aria-describedby="username" placeholder="enter username" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control is-valid" id="password" placeholder="enter password" required>
+                    </div>
+                    <div class="invalid-feedback">Username and/or password are incorrect</div>
+                    <div class="row justify-content-md-center">
+                        <div class="col-auto">
+                            <button ng-click="register()" id="registerButton" type="submit" class="btn btn-primary">sign up</button>
+                        </div>
+                    </div>
+                    <div class="row justify-content-md-center">
+                        <div class="col-auto">
+                            <small class="form-text text-muted">or</small>
+                        </div>
+                    </div>
+                    <div class="row justify-content-md-center">
+                        <div class="col-auto">
+                            <a href="#/login"><button type="button" class="btn btn-secondary">log in</button></a>
+                        </div>
+                        <div class="col-auto">
+                            <a href="#/search"><button type="button" class="btn btn-secondary">look up</button></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </script>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js " integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo " crossorigin="anonymous "></script>
+    <script type="text/ng-template" id="/search.html">
+        <div class="row justify-content-md-center">
+            <div class="mainForm col-md-auto bg-light">
+                <form id="searchForm">
+                    <h1 class="col">Wish List</h1>
+                    <div class="form-group">
+                        <input type="text" class="form-control is-valid" id="username" aria-describedby="username" placeholder="enter user">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control is-valid" id="boardName" placeholder="enter board">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect2">Select a board</label>
+                        <select multiple class="form-control" id="exampleFormControlSelect2">
+                            <option>1</option>
+                         </select>
+                    </div>
+                    <div class="row justify-content-md-center">
+                        <div class="col-auto">
+                            <button ng-click="search()" id="searchButton" type="submit" class="btn btn-primary">look up</button>
+                        </div>
+                    </div>
+                    <div class="row justify-content-md-center">
+                        <div class="col-auto">
+                            <small class="form-text text-muted">or</small>
+                        </div>
+                    </div>
+                    <div class="row justify-content-md-center">
+                        <div class="col-auto">
+                            <a href="#/login"><button type="button" class="btn btn-secondary">log in</button></a>
+                        </div>
+                        <div class="col-auto">
+                            <a href="#/register"><button type="button" class="btn btn-secondary">sign up</button></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js " integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49 " crossorigin="anonymous "></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js " integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy " crossorigin="anonymous "></script>
 </body>
