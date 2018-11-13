@@ -23,7 +23,8 @@ var itemSchema = mongoose.Schema({ //Defines the Schema for this database
     picture: String,
     title: String,
     description: String,
-    link: String
+    link: String,
+    enabled: Boolean
 });
 
 var User = mongoose.model('User', userSchema); //Makes an object from that schema as a model
@@ -59,10 +60,22 @@ var testItem = new Item({
 //     console.log(item);
 // });
 
-/* GET home page. */
+/* GET main page. */
 router.get('/', function(req, res, next) {
-    console.log("Sending main page");
+    console.log ("Sending main page");
     res.sendfile('main.html', { root: 'public' });
+});
+
+// /* GET home page.*/
+// router.get('/home', function(req, res, next) {
+//     console.log("Sending home page");
+//     res.sendfile('home.html', { root: 'public' });
+// });
+
+/* GET list page. */
+router.get('/', function(req, res, next) {
+    console.log("Sending list page");
+    res.sendfile('list.html', { root: 'public' });
 });
 
 router.post('/login', function(req, res, next) {
@@ -200,6 +213,10 @@ router.put('/item', function(req, res, next) {
     console.log("In find");
     res.status(200);
 });
+
+var getBoards = function(owner, boardName){
+    
+}
 
 
 module.exports = router;

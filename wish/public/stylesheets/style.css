@@ -12,3 +12,15 @@ a {
   border: 1px solid #68a2ff;
   padding: 30px;
 }
+
+.boardCard {
+  background-color: #91bbff;
+  border-radius: 10px;
+  border: 1px solid #68a2ff;
+  padding: 10px;
+}
+
+.boardSetting:hover {
+  color: black;
+  cursor: pointer;
+}
