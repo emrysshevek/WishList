@@ -8,6 +8,14 @@ app.factory('user', function() {
         username: username,
         token: token
     }
+});
+
+app.factory('chosenBoard', function() {
+    var boardName = '';
+
+    return {
+        name: boardName,
+    }
 })
 
 app.config([
@@ -32,6 +40,10 @@ app.config([
                 url: '/home',
                 templateUrl: '/home.html',
                 controller: 'HomeCtrl'
+            }).state('list', {
+                url: '/list',
+                templateUrl: '/list.html',
+                controller: 'ListCtrl'
             });
 
         $urlRouterProvider.otherwise('login');
@@ -129,7 +141,7 @@ app.controller('SearchCtrl', function($scope, $http) {
 
 });
 
-app.controller('HomeCtrl', function($scope, $http, user) {
+app.controller('HomeCtrl', function($scope, $http, $state, user, chosenBoard) {
     console.log("in home.html");
     console.log("user: " + user.username + " token: " + user.token);
     $scope.boards = [];
@@ -142,7 +154,10 @@ app.controller('HomeCtrl', function($scope, $http, user) {
     });
 
     $scope.goToBoard = function(board) {
+        console.log(board);
         console.log("go to board");
+        chosenBoard.name = board.boardName;
+        $state.go('list')
     }
 
     $scope.edit = function(board) {
@@ -153,4 +168,9 @@ app.controller('HomeCtrl', function($scope, $http, user) {
         console.log("delete");
     }
 
+});
+
+app.controller('ListCtrl', function($scope, $http, $state, user, chosenBoard) {
+    console.log("in list.html");
+    console.log(chosenBoard);
 });

@@ -130,7 +130,7 @@
     </script>
 
     <script type="text/ng-template" id="/home.html">
-        <h1>MY BOARDS</h1>
+        <h1>MY WISH LISTS</h1>
         <div class="container">
             <div class="row justify-content-sm-center">
                 <div class="col-sm">
@@ -146,6 +146,28 @@
                             </div>
                             <div class="col-auto">
                                 <small ng-click="edit(board)" class="text-muted boardSetting">edit</small><small class="text-muted"> | </small><small ng-click="delete(board)" class="text-muted boardSetting">delete</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="/list.html">
+        <h1>LIST NAME</h1>
+        <div class="container">
+            <div class="row justify-content-sm-center">
+                <div class="col-sm">
+                    <input class="form-control form-control-sm" type="text" placeholder="filter items">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md">
+                    <div class="container boardCard">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-lg boardTitle" ng-click="">
+                                <h5>ITEM 1</h5>
                             </div>
                         </div>
                     </div>
