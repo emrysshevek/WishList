@@ -154,7 +154,7 @@
         </div>
     </script>
 
-    <script type="text/ng-template" id="/list.html">
+    <script type="text/ng-template" id="/items.html">
         <h1>LIST NAME</h1>
         <div class="container">
             <div class="row justify-content-sm-center">
@@ -166,8 +166,12 @@
                 <div class="col-md">
                     <div class="container boardCard">
                         <div class="row justify-content-between align-items-center">
-                            <div class="col-lg boardTitle" ng-click="">
+                            <div class="col-lg itemTitle" ng-click="">
                                 <h5>ITEM 1</h5>
+                            </div>
+                            <div class="col-auto">
+                                <small ng-click="edit(item)" class="text-muted boardSetting">edit</small><small class="text-muted"> | </small><small ng-click="delete(item)" class="text-muted boardSetting">delete</small>
+                            </div>
                             </div>
                         </div>
                     </div>

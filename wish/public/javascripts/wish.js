@@ -42,7 +42,7 @@ app.config([
                 controller: 'HomeCtrl'
             }).state('list', {
                 url: '/list',
-                templateUrl: '/list.html',
+                templateUrl: '/items.html',
                 controller: 'ListCtrl'
             });
 
@@ -138,7 +138,6 @@ app.controller('SearchCtrl', function($scope, $http) {
             });
         }
     }
-
 });
 
 app.controller('HomeCtrl', function($scope, $http, $state, user, chosenBoard) {
@@ -172,5 +171,13 @@ app.controller('HomeCtrl', function($scope, $http, $state, user, chosenBoard) {
 
 app.controller('ListCtrl', function($scope, $http, $state, user, chosenBoard) {
     console.log("in list.html");
+    
+    $scope.edit = function(board) {
+        console.log("Item edit");
+    }
+    
+    $scope.delete = function(board) {
+        console.log(" Item delete");
+    }
     console.log(chosenBoard);
 });

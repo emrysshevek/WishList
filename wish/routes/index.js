@@ -47,18 +47,18 @@ var testItem = new Item({
     link: "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwiVorvBq8reAhWnllQKHeM0Bq4Qjhx6BAgBEAM&url=https%3A%2F%2Fwww.today.com%2Ffood%2Fskittles-myth-are-red-yellow-green-all-same-flavor-t121718&psig=AOvVaw2EThyNk-P3XlXnMtIbhzYT&ust=1541956970724424"
 });
 
-// testUser.save(function(err, user) {
-//     if (err) return console.error(err);
-//     console.log(user);
-// });
-// testBoard.save(function(err, board) {
-//     if (err) return console.error(err);
-//     console.log(board);
-// });
-// testItem.save(function(err, item) {
-//     if (err) return console.error(err);
-//     console.log(item);
-// });
+testUser.save(function(err, user) {
+    if (err) return console.error(err);
+    console.log(user);
+});
+testBoard.save(function(err, board) {
+    if (err) return console.error(err);
+    console.log(board);
+});
+testItem.save(function(err, item) {
+    if (err) return console.error(err);
+    console.log(item);
+});
 
 /* GET main page. */
 router.get('/', function(req, res, next) {
@@ -195,22 +195,22 @@ router.delete('/board', function(req, res, next) {
 });
 
 router.get('/item', function(req, res, next) {
-    console.log("In find");
+    console.log("In get item");
     res.status(200);
 });
 
 router.post('/item', function(req, res, next) {
-    console.log("In find");
+    console.log("In post item");
     res.status(200);
 });
 
 router.delete('/item', function(req, res, next) {
-    console.log("In find");
+    console.log("In delete item");
     res.status(200);
 });
 
 router.put('/item', function(req, res, next) {
-    console.log("In find");
+    console.log("In put item");
     res.status(200);
 });
 
