@@ -36,14 +36,14 @@ app.config([
                 url: '/search',
                 templateUrl: '/search.html',
                 controller: 'SearchCtrl'
-            }).state('home', {
-                url: '/home',
-                templateUrl: '/home.html',
-                controller: 'HomeCtrl'
-            }).state('list', {
-                url: '/list',
-                templateUrl: '/list.html',
-                controller: 'ListCtrl'
+            }).state('boards', {
+                url: '/boards',
+                templateUrl: '/boards.html',
+                controller: 'BoardsCtrl'
+            }).state('items', {
+                url: '/items',
+                templateUrl: '/items.html',
+                controller: 'ItemsCtrl'
             });
 
         $urlRouterProvider.otherwise('login');
@@ -74,7 +74,7 @@ app.controller('LoginCtrl', function($scope, $http, $window, $location, $state, 
                 console.log(response.data.token);
                 user.username = username;
                 user.token = response.data.token;
-                $state.go('home');
+                $state.go('boards');
             }
         });
         $("#username").val("");
@@ -141,7 +141,7 @@ app.controller('SearchCtrl', function($scope, $http) {
 
 });
 
-app.controller('HomeCtrl', function($scope, $http, $state, user, chosenBoard) {
+app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) {
     console.log("in home.html");
     console.log("user: " + user.username + " token: " + user.token);
     $scope.boards = [];
@@ -157,7 +157,7 @@ app.controller('HomeCtrl', function($scope, $http, $state, user, chosenBoard) {
         console.log(board);
         console.log("go to board");
         chosenBoard.name = board.boardName;
-        $state.go('list')
+        $state.go('items')
     }
 
     $scope.edit = function(board) {
@@ -170,7 +170,7 @@ app.controller('HomeCtrl', function($scope, $http, $state, user, chosenBoard) {
 
 });
 
-app.controller('ListCtrl', function($scope, $http, $state, user, chosenBoard) {
+app.controller('ItemsCtrl', function($scope, $http, $state, user, chosenBoard) {
     console.log("in list.html");
     console.log(chosenBoard);
 });
