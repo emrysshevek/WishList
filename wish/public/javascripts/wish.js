@@ -82,8 +82,6 @@ app.controller('LoginCtrl', function($scope, $http, $window, $location, $state, 
         $("#password").val("");
 
     }
-
-
 });
 
 app.controller('RegisterCtrl', function($scope, $http) {
@@ -179,6 +177,7 @@ app.controller('ItemsCtrl', function($scope, $http, $state, user, chosenBoard) {
     
     $scope.delete = function(board) {
         console.log(" Item delete");
+        
     }
     console.log(chosenBoard);
 });
