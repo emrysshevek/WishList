@@ -94,11 +94,7 @@ app.controller('LoginCtrl', function($scope, $http, $window, $location, $state, 
             $("#password").val("");
 
         }
-    }
-<<<<<<< HEAD
-=======
-
->>>>>>> c42dd2b35e5af90082e5e2a47cd2684f8c359d60
+    };
 });
 
 app.controller('RegisterCtrl', function($scope, $http) {
@@ -189,11 +185,74 @@ app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) 
 app.controller('ItemsCtrl', function($scope, $http, $state, user, chosenBoard) {
     console.log("in list.html");
     
-    $scope.edit = function(board) {
+    $scope.addItem = function() {
+        $scope.addItemScreen = true;
+        console.log("addItem");
+    }
+    
+    $scope.clearFields = function() {
+        console.log("clear");
+        $scope.name = null;
+        $scope.imgURL = null;
+        $scope.theDescription = null;
+        $scope.link = null;
+        console.log("addItem");
+    }
+    
+    $scope.submitItem = function() {
+        var title = $("#name").val();
+        var url = $("#url").val();
+        $scope.add(title, url);
+        //$scope.get();
+        $scope.clearFields();
+        $scope.addItemScreen = false;
+        console.log("submit");
+    }
+    
+    $scope.cancelItem = function() {
+        $scope.addItemScreen = false;
+        $scope.clearFields();
+        console.log("cancel");
+    }
+    
+    $scope.get = function() {
+        // $.getJSON('comment/all', function(data) {
+        //     console.log(data);
+        //     var everything = "<ul>";
+        //     for (var comment in data) {
+        //         var com = data[comment];
+        //         everything += "<li> Name: " + com.Name + " -- Comment: " + com.Comment + "</li>";
+        //     }
+        //     everything += "</ul>";
+        //     $("#comments").html(everything);
+        // });
+    }
+    
+    $scope.isOwner = function() {
+        return user;
+    }
+    
+    $scope.add = function(title, url, description, link) {
+        var myobj = { chosenBoard, picture: url, title: title, description: description, link: link, boolean: true };
+        var jobj = JSON.stringify(myobj);
+        $("#json").text(jobj);
+        var url = "item";
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: jobj,
+            contentType: "application/json; charset=utf-8",
+            success: function(data, textStatus) {
+                console.log(textStatus);
+            }
+        });
+    }
+    
+    $scope.edit = function(item) {
         console.log("Item edit");
     }
     
-    $scope.delete = function(board) {
+    $scope.delete = function(item) {
         console.log(" Item delete");
         
     }

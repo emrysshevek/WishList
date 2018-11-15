@@ -63,7 +63,7 @@ db.once('open', function() { //Lets us know when we're connected
 /* GET main page. */
 router.get('/', function(req, res, next) {
     console.log ("Sending main page");
-    res.sendfile('main.html', { root: 'public' });
+    res.sendFile('main.html', { root: 'public' });
 });
 
 // /* GET home page.*/
@@ -201,7 +201,13 @@ router.get('/item', function(req, res, next) {
 
 router.post('/item', function(req, res, next) {
     console.log("In post item");
-    res.status(200);
+    var newItem = new Item(req.body);
+    console.log(newItem);
+    newItem.save(function(err, post) {
+        if (err) return console.error(err);
+        console.log(post);
+        res.sendStatus(200);
+    });
 });
 
 router.delete('/item', function(req, res, next) {
