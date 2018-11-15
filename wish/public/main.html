@@ -136,10 +136,15 @@
         <div class="container">
             <div class="row justify-content-sm-center">
                 <div class="col-sm">
-                    <input class="form-control form-control-sm" type="text" placeholder="filter boards">
+                    <input class="form-control form-control-sm" type="text" placeholder="filter lists">
                 </div>
             </div>
             <div class="row">
+                <div class="col-md overlay">
+                    <div class="boardForm">
+                        <h1>OVERLAY</h1>
+                    </div>
+                </div>
                 <div class="col-md">
                     <div class="container boardCard" ng-repeat="board in boards">
                         <div class="row justify-content-between align-items-center">
@@ -151,6 +156,11 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="row justify-content-md-center">
+                <div class="col-auto">
+                    <h6 class="add" ng-click="addBoard()">&plus; add list</h6>
                 </div>
             </div>
         </div>

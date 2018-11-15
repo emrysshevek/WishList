@@ -158,13 +158,6 @@ app.controller('SearchCtrl', function($scope, $http, $state, user) {
         }
     }
 
-    $scope.selectBoard = function(board) {
-        console.log("selectBoard");
-        // selectedBoard = board;
-        // $scope.hasPassword = board.settings.hasPassword;
-        // console.log($scope.selectedBoard.boardName);
-    }
-
     $scope.goToBoard = function() {
         console.log("goToBoard");
         console.log($scope.selectedBoard);
@@ -176,13 +169,13 @@ app.controller('SearchCtrl', function($scope, $http, $state, user) {
                 else {
                     user.username = $scope.selectedBoard.owner;
                     user.owner = false;
-                    $state.go("boards");
+                    $state.go("items");
                 }
             }
             else {
                 user.username = $scope.selectedBoard.owner;
                 user.owner = false;
-                $state.go("boards");
+                $state.go("items");
             }
         }
     }
@@ -193,7 +186,9 @@ app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) 
     console.log("in home.html");
     console.log("user: " + user.username + " token: " + user.token);
     console.log("is owner: " + user.owner);
+
     $scope.boards = [];
+    $scope.isOwner = user.owner;
 
     var url = "/board?owner=" + user.username;
 
@@ -215,6 +210,11 @@ app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) 
 
     $scope.delete = function(board) {
         console.log("delete");
+    }
+
+    $scope.addBoard = function() {
+        console.log("add board");
+        $(".overlay").show();
     }
 
 });
