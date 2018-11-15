@@ -3,10 +3,19 @@ var app = angular.module('app', ['ui.router']);
 app.factory('user', function() {
     var username = '';
     var token = '';
+    var owner = false;
+
+    var reset = function() {
+        username = '';
+        token = '';
+        owner = false;
+    }
 
     return {
         username: username,
-        token: token
+        token: token,
+        owner: owner,
+        reset: reset
     }
 });
 
@@ -52,36 +61,39 @@ app.config([
 
 app.controller('LoginCtrl', function($scope, $http, $window, $location, $state, user) {
     console.log("in Login");
+    user.reset();
 
     $scope.login = function() {
         var username = $("#username").val();
         var password = $("#password").val();
-        var request = { username: username, password: password };
-        console.log(request);
-        var url = "/login";
-        $http({
-            method: "POST",
-            url: url,
-            data: request
-        }).then(function(response) {
-            var success = response.data.success;
-            console.log(success);
-            if (!success) {
-                $("#username").addClass("is-invalid").removeClass("is-valid");
-                $("#password").addClass("is-invalid").removeClass("is-valid");
-            }
-            else {
-                console.log(response.data.token);
-                user.username = username;
-                user.token = response.data.token;
-                $state.go('boards');
-            }
-        });
-        $("#username").val("");
-        $("#password").val("");
+        if (username && password) {
+            var request = { username: username, password: password };
+            console.log(request);
+            var url = "/login";
+            $http({
+                method: "POST",
+                url: url,
+                data: request
+            }).then(function(response) {
+                var success = response.data.success;
+                console.log(success);
+                if (!success) {
+                    $("#username").addClass("is-invalid").removeClass("is-valid");
+                    $("#password").addClass("is-invalid").removeClass("is-valid");
+                }
+                else {
+                    console.log(response.data.token);
+                    user.username = username;
+                    user.token = response.data.token;
+                    user.owner = true;
+                    $state.go('boards');
+                }
+            });
+            $("#username").val("");
+            $("#password").val("");
 
+        }
     }
-
 
 });
 
@@ -91,7 +103,7 @@ app.controller('RegisterCtrl', function($scope, $http) {
     $scope.register = function() {
         var username = $("#username").val();
         var password = $("#password").val();
-        if (username || password) {
+        if (username && password) {
 
             var request = { username: $("#username").val(), password: $("#password").val() };
             console.log(request);
@@ -144,6 +156,7 @@ app.controller('SearchCtrl', function($scope, $http) {
 app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) {
     console.log("in home.html");
     console.log("user: " + user.username + " token: " + user.token);
+    console.log("is owner: " + user.owner);
     $scope.boards = [];
 
     var url = "/board?owner=" + user.username;
