@@ -134,10 +134,13 @@ app.controller('RegisterCtrl', function($scope, $http, user) {
 
 });
 
-app.controller('SearchCtrl', function($scope, $http) {
+app.controller('SearchCtrl', function($scope, $http, $state, user) {
     console.log("in Search");
+    user.reset();
 
     $scope.searchBoards = []
+    $scope.hasPassword = false;
+    $scope.selectedBoard;
 
     $scope.search = function() {
         var owner = $("#username").val();
@@ -152,6 +155,35 @@ app.controller('SearchCtrl', function($scope, $http) {
                 console.log(response);
                 $scope.searchBoards = response.data;
             });
+        }
+    }
+
+    $scope.selectBoard = function(board) {
+        console.log("selectBoard");
+        // selectedBoard = board;
+        // $scope.hasPassword = board.settings.hasPassword;
+        // console.log($scope.selectedBoard.boardName);
+    }
+
+    $scope.goToBoard = function() {
+        console.log("goToBoard");
+        console.log($scope.selectedBoard);
+        if ($scope.selectedBoard) {
+            if ($scope.hasPassword) {
+                if ($scope.password != $scope.selectedBoard.password) {
+                    $scope.password = "";
+                }
+                else {
+                    user.username = $scope.selectedBoard.owner;
+                    user.owner = false;
+                    $state.go("boards");
+                }
+            }
+            else {
+                user.username = $scope.selectedBoard.owner;
+                user.owner = false;
+                $state.go("boards");
+            }
         }
     }
 
