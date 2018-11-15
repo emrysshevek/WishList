@@ -97,14 +97,15 @@ app.controller('LoginCtrl', function($scope, $http, $window, $location, $state, 
 
 });
 
-app.controller('RegisterCtrl', function($scope, $http) {
+app.controller('RegisterCtrl', function($scope, $http, user) {
     console.log("in register");
+    user.reset();
 
     $scope.register = function() {
         var username = $("#username").val();
         var password = $("#password").val();
-        if (username && password) {
 
+        if (username && password) {
             var request = { username: $("#username").val(), password: $("#password").val() };
             console.log(request);
             var url = "/register";
@@ -121,6 +122,9 @@ app.controller('RegisterCtrl', function($scope, $http) {
                 }
                 else {
                     console.log(response.data.token);
+                    user.username = username;
+                    user.token = response.data.token;
+                    user.owner = true;
                 }
             });
             $("#username").val("");
