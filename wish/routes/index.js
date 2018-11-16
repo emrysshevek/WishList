@@ -22,7 +22,7 @@ var itemSchema = mongoose.Schema({ //Defines the Schema for this database
     board: String,
     picture: String,
     title: String,
-    description: String,
+    theDescription: String,
     link: String,
     enabled: Boolean
 });
@@ -62,7 +62,7 @@ db.once('open', function() { //Lets us know when we're connected
 
 /* GET main page. */
 router.get('/', function(req, res, next) {
-    console.log ("Sending main page");
+    console.log("Sending main page");
     res.sendFile('main.html', { root: 'public' });
 });
 
@@ -195,7 +195,15 @@ router.delete('/board', function(req, res, next) {
 });
 
 router.get('/item', function(req, res, next) {
+    var boardQuery = req.query.board;
+    console.log(boardQuery);
     console.log("In get item");
+    Item.find({ 'board': boardQuery }, function(err, itemList) { //Calls the find() method on your database
+        if (err) return console.error(err); //If there's an error, print it out
+        else {
+            res.json(itemList); //Then send the comments
+        }
+    })
     res.status(200);
 });
 
@@ -211,17 +219,36 @@ router.post('/item', function(req, res, next) {
 });
 
 router.delete('/item', function(req, res, next) {
-    console.log("In delete item");
+    console.log("IN DELETE");
+    console.log(req.query.id);
+
+    Item.findOne({ _id: req.query.id }).remove(function(err, removed) {
+        if (err) { console.log(err); return err; }
+        console.log(removed);
+    });
     res.status(200);
 });
 
 router.put('/item', function(req, res, next) {
     console.log("In put item");
+    Item.findOne({ _id: req.query.id }, (function(err, item) {
+        if (err) { console.log(err); }
+        if (!item) {
+            item.title = req.query.name;
+            item.picture = req.query.pic;
+            item.link = req.query.link;
+            item.theDescription = req.query.desc;
+            item.save(function(err, item) {
+                if (err) { console.lot(err); }
+               console.log(item); 
+            });
+        }
+    }));
     res.status(200);
 });
 
-var getBoards = function(owner, boardName){
-    
+var getBoards = function(owner, boardName) {
+
 }
 
 

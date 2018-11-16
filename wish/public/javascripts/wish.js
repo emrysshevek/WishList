@@ -182,63 +182,71 @@ app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) 
 
 });
 
-app.controller('ItemsCtrl', function($scope, $http, $state, user, chosenBoard) {
+app.controller('ItemsCtrl', function($scope, $compile, $http, $state, user, chosenBoard) {
+    var editID = "";
     console.log("in list.html");
-    
+    $scope.items = [];
+    $scope.boardName = chosenBoard.name;
+
+    var url = "/item?board=" + chosenBoard.name;
+
+    $scope.getAll = function() {
+        $http.get(url).then(function(response) {
+            $scope.items = response.data;
+        });
+    };
+
+    $scope.getAll();
+
     $scope.addItem = function() {
         $scope.addItemScreen = true;
         console.log("addItem");
-    }
-    
+    };
+
     $scope.clearFields = function() {
         console.log("clear");
-        $scope.name = null;
-        $scope.imgURL = null;
-        $scope.theDescription = null;
-        $scope.link = null;
+        $scope.name = "";
+        $scope.imgURL = "";
+        $scope.theDescription = "";
+        $scope.link = "";
         console.log("addItem");
-    }
-    
-    $scope.submitItem = function() {
-        var title = $("#name").val();
-        var url = $("#url").val();
-        $scope.add(title, url);
-        //$scope.get();
-        $scope.clearFields();
-        $scope.addItemScreen = false;
-        console.log("submit");
-    }
-    
+    };
+
     $scope.cancelItem = function() {
         $scope.addItemScreen = false;
         $scope.clearFields();
         console.log("cancel");
-    }
-    
+    };
+
+    $scope.submitItem = function() {
+        var title = $("#name").val();
+        var url = $("#url").val();
+        var description = $("#theDescription").val();
+        var link = $("#link").val();
+        console.log(title, url, description, link);
+        $scope.add(title, url, description, link);
+        $scope.getAll();
+        $scope.clearFields();
+        $scope.addItemScreen = false;
+        console.log("submit");
+    };
+
     $scope.get = function() {
-        // $.getJSON('comment/all', function(data) {
-        //     console.log(data);
-        //     var everything = "<ul>";
-        //     for (var comment in data) {
-        //         var com = data[comment];
-        //         everything += "<li> Name: " + com.Name + " -- Comment: " + com.Comment + "</li>";
-        //     }
-        //     everything += "</ul>";
-        //     $("#comments").html(everything);
-        // });
+        $http.get('item/:' + chosenBoard + query, function(data) {});
     }
-    
+
     $scope.isOwner = function() {
         return user;
-    }
-    
-    $scope.add = function(title, url, description, link) {
-        var myobj = { chosenBoard, picture: url, title: title, description: description, link: link, boolean: true };
+    };
+
+    $scope.add = function(title, url, description, theLink) {
+        console.log(chosenBoard.name);
+        var myobj = { board: chosenBoard.name, picture: url, title: title, theDescription: description, link: theLink, boolean: true };
         var jobj = JSON.stringify(myobj);
         $("#json").text(jobj);
-        var url = "item";
+        var URL = "item";
         $.ajax({
-            url: url,
+            url: URL,
             type: "POST",
             data: jobj,
             contentType: "application/json; charset=utf-8",
@@ -246,15 +254,46 @@ app.controller('ItemsCtrl', function($scope, $http, $state, user, chosenBoard) {
                 console.log(textStatus);
             }
         });
+    };
+    
+
+    $scope.submitEdit = function() {
+        console.log("HELOO");
+        $http.put("item?id=" + editID + "&name=" + $scope.editName + "&pic=" + $scope.editImgURL + "&desc=" + $scope.editTheDescription + "&link=" + $scope.editLink).then(function(response) {
+            console.log(response);
+        });
+        $scope.getAll();
+        $scope.editItemScreen = false;
+        console.log("Item edit submit");
+    };
+    
+    $scope.cancelEdit = function() {
+        $scope.editItemScreen = false;
+        console.log("Item edit cancel");
     }
     
     $scope.edit = function(item) {
-        console.log("Item edit");
+        editID = item._id;
+        console.log(item);
+        $scope.editName = item.title;
+        $scope.editImgURL = item.picture;
+        $scope.editTheDescription = item.theDescription;
+        $scope.editLink = item.link;
+        $scope.editItemScreen = true;
     }
-    
+
     $scope.delete = function(item) {
-        console.log(" Item delete");
-        
-    }
+        console.log("Item delete");
+        var id = item._id;
+        console.log(item);
+        $.ajax({
+            url: 'item?id=' + id,
+            type: 'DELETE',
+            success: function(data) {
+                console.log("delete successful");
+            }
+        });
+        $scope.getAll();
+    };
     console.log(chosenBoard);
 });

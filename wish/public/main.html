@@ -163,16 +163,16 @@
                             <form id="registerForm">
                                 <h1 class="col">Add Item</h1>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="name" placeholder="name" ng-model="name" required>
+                                    <input type="text" class="form-control is-valid" id="name" placeholder="name" ng-model="name">
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="url" placeholder="image url" ng-model="imgURL">
+                                    <input type="text" class="form-control is-valid" id="url" placeholder="image url" ng-model="imgURL">
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="url" placeholder="description" ng-model="theDescription">
+                                    <input type="text" class="form-control is-valid" id="theDescription" placeholder="description" ng-model="theDescription">
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="url" placeholder="link" ng-model="link">
+                                    <input type="text" class="form-control is-valid" id="link" placeholder="link" ng-model="link">
                                 </div>
                                 <div class="row justify-content-md-center">
                                     <div class="col-auto">
@@ -189,11 +189,47 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <div id="page-mask" ng-show="addItemScreen"></div>
         </div>
-        <h1>LIST NAME</h1>
+        <div class="editWrapper">
+            <div ng-show="editItemScreen" class="editItemScreen">
+                <div id="box">
+                    <div class="row justify-content-md-center">
+                        <div class="col-md-auto">
+                            <form id="registerForm">
+                                <h1 class="col">Edit Item</h1>
+                                <div class="form-group">
+                                    <input type="text" class="form-control is-valid" id="editName" ng-model="editName">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control is-valid" id="editURL" ng-model="editImgURL">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control is-valid" id="editTheDescription" ng-model="editTheDescription">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control is-valid" id="editLink" ng-model="editLink">
+                                </div>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-auto">
+                                        <button ng-click="submitEdit()" id="submitEditButton" type="submit" class="btn btn-primary">Save</button>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-auto">
+                                        <button ng-click="cancelEdit()" id="cancelEditButton" type="submit" class="btn btn-primary">Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="page-mask" ng-show="editItemScreen"></div>
+        </div>
+        <h1>{{boardName}}</h1>
         <div class="container">
             <div class="row justify-content-sm-center">
                 <div class="col-sm">
@@ -202,12 +238,15 @@
             </div>
             <div class="row">
                 <div class="col-md">
-                    <div class="container boardCard">
+                    <br>
+                    <div class="container itemCard" ng-repeat="item in items">
                         <div class="row justify-content-between align-items-center">
+                            <div id="picture" style="background: url({{item.picture}}) 50% 50% no-repeat;"></div>
                             <div class="col-lg itemTitle">
-                                <h5>ITEM 1</h5>
+                                <h3><a href="{{item.link}}">{{item.title}}</a></h3>
+                                <p>{{item.theDescription}}</p>
                             </div>
-                            <div class="col-auto" ng-if="isOwner()">
+                            <div class="col-auto">
                                 <small ng-click="edit(item)" class="text-muted boardSetting">edit</small><small class="text-muted"> | </small><small ng-click="delete(item)" class="text-muted boardSetting">delete</small>
                             </div>
                         </div>
