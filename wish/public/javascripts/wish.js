@@ -143,7 +143,7 @@ app.controller('LoginCtrl', function($scope, $http, $window, $location, $state, 
     };
 });
 
-app.controller('RegisterCtrl', function($scope, $http, user) {
+app.controller('RegisterCtrl', function($scope, $http, $state, user) {
     console.log("in register");
     user.reset();
 
@@ -171,6 +171,7 @@ app.controller('RegisterCtrl', function($scope, $http, user) {
                     user.setUsername(username);
                     user.setToken(response.data.token);
                     user.setOwner(true);
+                    $state.go("boards");
                 }
             });
             $("#username").val("");
