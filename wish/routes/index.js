@@ -129,7 +129,7 @@ router.post('/register', function(req, res, next) {
         else {
             res.send({ success: false })
         }
-        console.log(user);
+        // console.log(user);
     })
     // response = { response: "logged in" };
     // res.send(response);
@@ -241,7 +241,7 @@ router.put('/item', function(req, res, next) {
             item.theDescription = req.query.desc;
             item.save(function(err, item) {
                 if (err) { console.lot(err); }
-               console.log(item); 
+                console.log(item);
             });
         }
     }));

@@ -258,9 +258,40 @@ app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) 
     }
 
     $scope.addBoard = function() {
-        $scope.addItemScreen = true;
+        $scope.addBoardScreen = true;
         console.log("add board");
     }
+
+    $scope.isOwner = function() {
+        return user.getOwner();
+    };
+
+    $scope.cancelItem = function() {
+        $scope.addBoardScreen = false;
+        $scope.clearFields();
+        console.log("cancel");
+    };
+
+    $scope.clearFields = function() {
+        console.log("clear");
+        $scope.name = "";
+        $scope.password = "";
+        $scope.requirePassword = false;
+        console.log("addItem");
+    };
+
+    $scope.submitBoard = function() {
+        // var title = $("#name").val();
+        // var url = $("#url").val();
+        // var description = $("#theDescription").val();
+        // var link = $("#link").val();
+        // console.log(title, url, description, link);
+        // $scope.add(title, url, description, link);
+        // $scope.getAll();
+        $scope.clearFields();
+        $scope.addItemScreen = false;
+        console.log("submit");
+    };
 
 });
 

@@ -133,27 +133,28 @@
 
     <script type="text/ng-template" id="/boards.html">
         <div class="addWrapper">
-            <div ng-show="addItemScreen" class="addItemScreen">
+            <div ng-show="addBoardScreen" class="addItemScreen">
                 <div id="box">
                     <div class="row justify-content-md-center">
                         <div class="col-md-auto">
                             <form id="registerForm">
-                                <h1 class="col">Add Item</h1>
+                                <h1 class="col">Add List</h1>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="name" placeholder="name" ng-model="name">
+                                    <input type="text" class="form-control is-valid" id="name" placeholder="name" ng-model="name">
                                 </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="url" placeholder="image url" ng-model="imgURL">
+                                <div>
+                                    <h5 style="margin: 10px;">require password</h5>
+                                    <label class="switch">
+                                        <input type="checkbox" ng-model="requirePassword">
+                                        <span class="slider round"></span>
+                                    </label>
                                 </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="url" placeholder="description" ng-model="theDescription">
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="url" placeholder="link" ng-model="link">
+                                <div class="form-group" ng-if="requirePassword">
+                                    <input type="password" class="form-control is-valid" id="password" placeholder="password" ng-model="password">
                                 </div>
                                 <div class="row justify-content-md-center">
                                     <div class="col-auto">
-                                        <button ng-click="submitItem()" id="submitButton" type="submit" class="btn btn-primary">Submit Item</button>
+                                        <button ng-click="submitBoard()" id="submitButton" type="submit" class="btn btn-primary">Submit List</button>
                                     </div>
                                 </div>
                                 <br>
@@ -166,19 +167,56 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <div id="page-mask" ng-show="addItemScreen"></div>
         </div>
-        <h1>MY WISH LISTS</h1>
+        <div class="editWrapper">
+            <div ng-show="editItemScreen" class="editItemScreen">
+                <div id="box">
+                    <div class="row justify-content-md-center">
+                        <div class="col-md-auto">
+                            <form id="registerForm">
+                                <h1 class="col">Edit Item</h1>
+                                <div class="form-group">
+                                    <input type="text" class="form-control is-valid" id="editName" ng-model="editName">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control is-valid" id="editURL" ng-model="editImgURL">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control is-valid" id="editTheDescription" ng-model="editTheDescription">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control is-valid" id="editLink" ng-model="editLink">
+                                </div>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-auto">
+                                        <button ng-click="submitEdit()" id="submitEditButton" type="submit" class="btn btn-primary">Save</button>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-auto">
+                                        <button ng-click="cancelEdit()" id="cancelEditButton" type="submit" class="btn btn-primary">Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="page-mask" ng-show="editItemScreen"></div>
+        </div>
+        <h1>My Wish Lists</h1>
         <div class="container">
             <div class="row justify-content-sm-center">
                 <div class="col-sm">
-                    <input class="form-control form-control-sm" type="text" placeholder="filter lists">
+                    <input class="form-control form-control-sm" type="text" placeholder="filter items" id="filter" ng-model="filter">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md">
+                    <br>
                     <div class="container boardCard" ng-repeat="board in boards">
                         <div class="row justify-content-between align-items-center">
                             <div class="col-lg boardTitle" ng-click="goToBoard(board)">
@@ -189,13 +227,11 @@
                             </div>
                         </div>
                     </div>
+                    <br>
+                    <button ng-click="addBoard()" id="addItem" type="button" class="btn btn-primary" ng-if="isOwner()">Add List</button>
                 </div>
             </div>
-            <div class="row justify-content-md-center">
-                <div class="col-auto">
-                    <h6 class="add" ng-click="addBoard()">&plus; add list</h6>
-                </div>
-            </div>
+        </div>
         </div>
     </script>
 
