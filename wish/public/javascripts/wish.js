@@ -236,6 +236,7 @@ app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) 
     console.log("user: " + user.getUsername() + " token: " + user.getToken());
     console.log("is owner: " + user.getOwner());
 
+    $scope.allBoards = [];
     $scope.boards = [];
     $scope.isOwner = user.getOwner();
 
@@ -243,6 +244,30 @@ app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) 
 
     $http.get(url).then(function(response) {
         $scope.boards = response.data;
+        $scope.allBoards = response.data;
+        console.log($scope.boards);
+    });
+
+    $("#filter").keyup(function() {
+        $scope.boards = $scope.allBoards;
+        if ($scope.filter == "") {
+            $scope.$apply();
+            return;
+        }
+        var oldBoards = [];
+        var search = $scope.filter;
+        var regex = search;
+        for (var board in $scope.boards) {
+            console.log($scope.boards[board].boardName);
+            var res = $scope.boards[board].boardName.toLowerCase().match(new RegExp(regex, 'gi'));
+            console.log(res);
+            console.log(regex);
+            if (res != null) {
+                oldBoards.push($scope.boards[board]);
+            }
+        }
+        $scope.boards = oldBoards;
+        $scope.$apply();
         console.log($scope.boards);
     });
 
@@ -262,8 +287,33 @@ app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) 
         $scope.editBoardScreen = true;
     }
 
+    $scope.submitEdit = function() {
+        var obj = { _id: editID, boardName: $scope.editName, password: $scope.editPassword, settings: { hasPassword: $scope.editRequirePassword, hide: false } };
+        var url = "/board";
+        $http({
+            method: "PUT",
+            url: url,
+            data: obj
+        }).then(function(response) {
+            console.log("edit response: " + response);
+        });
+        // $scope.getAll();
+        $scope.editBoardScreen = false;
+        console.log("Board edit submit");
+    };
+
     $scope.delete = function(board) {
         console.log("delete");
+        var id = board._id;
+        console.log(board);
+        $.ajax({
+            url: 'board?id=' + id,
+            type: 'DELETE',
+            success: function(data) {
+                console.log("delete successful");
+            }
+        });
+        // $scope.getAll();
     }
 
     $scope.addBoard = function() {
@@ -404,7 +454,6 @@ app.controller('ItemsCtrl', function($scope, $compile, $http, $state, user, chos
     }
 
     $scope.isOwner = function() {
-        console.log("isOwner() output: " + user.getOwner());
         return user.getOwner();
     };
 

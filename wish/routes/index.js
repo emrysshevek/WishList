@@ -192,12 +192,30 @@ router.post('/board', function(req, res, next) {
 });
 
 router.put('/board', function(req, res, next) {
-    console.log("In find");
-    res.status(200);
+    console.log("In put board");
+    var updatedBoard = req.body;
+    console.log(updatedBoard);
+    Board.findOne({ _id: updatedBoard._id }, function(err, board) {
+        board.boardName = updatedBoard.boardName;
+        board.settings = updatedBoard.settings;
+        board.password = updatedBoard.password;
+        board.save(function(err, board) {
+            if (err) { console.lot(err); }
+            console.log(board);
+            res.status(200);
+        });
+    })
+    res.status(500);
 });
 
 router.delete('/board', function(req, res, next) {
-    console.log("In find");
+    console.log("In delete board");
+    console.log(req.query.id);
+
+    Board.findOne({ _id: req.query.id }).remove(function(err, removed) {
+        if (err) { console.log(err); return err; }
+        console.log(removed);
+    });
     res.status(200);
 });
 
