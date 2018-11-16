@@ -246,6 +246,7 @@ router.put('/item', function(req, res, next) {
         }
     }));
     res.sendStatus(200);
+    res.send();
 });
 
 var getBoards = function(owner, boardName) {

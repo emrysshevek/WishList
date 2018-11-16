@@ -269,6 +269,7 @@ app.controller('ItemsCtrl', function($scope, $compile, $http, $state, user, chos
     console.log("in list.html");
 
     $scope.items = [];
+    $scope.allItems = [];
     $scope.boardName = chosenBoard.getName();
 
     var url = "/item?board=" + chosenBoard.getName();
@@ -276,6 +277,7 @@ app.controller('ItemsCtrl', function($scope, $compile, $http, $state, user, chos
     $scope.getAll = function() {
         $http.get(url).then(function(response) {
             $scope.items = response.data;
+            $scope.allItems = $scope.items;
             console.log(response.data);
         });
     };
@@ -285,8 +287,30 @@ app.controller('ItemsCtrl', function($scope, $compile, $http, $state, user, chos
     $scope.addItem = function() {
         $scope.addItemScreen = true;
         console.log("addItem");
-
     };
+
+    $("#filter").keyup(function() {
+        $scope.items = $scope.allItems;
+        if ($scope.filter == "") {
+            $scope.$apply();
+            return;
+        }
+        var oldItems = [];
+        var search = $scope.filter;
+        var regex = search;
+        for (var item in $scope.items) {
+            console.log($scope.items[item].title);
+            var res = $scope.items[item].title.toLowerCase().match(new RegExp(regex, 'gi'));
+            console.log(res);
+            console.log(regex);
+            if (res != null) {
+                oldItems.push($scope.items[item]);
+            }
+        }
+        $scope.items = oldItems;
+        $scope.$apply();
+        console.log($scope.items);
+    });
 
     $scope.clearFields = function() {
         console.log("clear");
@@ -340,7 +364,7 @@ app.controller('ItemsCtrl', function($scope, $compile, $http, $state, user, chos
             }
         });
     };
-    
+
 
     $scope.submitEdit = function() {
         var url = "item?id=" + editID + "&name=" + $scope.editName + "&pic=" + $scope.editImgURL + "&desc=" + $scope.editTheDescription + "&link=" + $scope.editLink;
@@ -351,7 +375,7 @@ app.controller('ItemsCtrl', function($scope, $compile, $http, $state, user, chos
         $scope.editItemScreen = false;
         console.log("Item edit submit");
     };
-    
+
     $scope.cancelEdit = function() {
         $scope.editItemScreen = false;
         console.log("Item edit cancel");
