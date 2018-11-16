@@ -303,7 +303,7 @@
                         </div>
                     </div>
                     <br>
-                    <button ng-click="addItem()" id="addItem" type="submit" class="btn btn-primary">Add Item</button>
+                    <button ng-click="addItem()" id="addItem" type="submit" class="btn btn-primary" ng-if="isOwner()">Add Item</button>
                 </div>
             </div>
         </div>
