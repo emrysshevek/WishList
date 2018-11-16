@@ -234,7 +234,7 @@ router.put('/item', function(req, res, next) {
     console.log("In put item");
     Item.findOne({ _id: req.query.id }, (function(err, item) {
         if (err) { console.log(err); }
-        if (!item) {
+        if (item) {
             item.title = req.query.name;
             item.picture = req.query.pic;
             item.link = req.query.link;
@@ -245,7 +245,7 @@ router.put('/item', function(req, res, next) {
             });
         }
     }));
-    res.status(200);
+    res.sendStatus(200);
 });
 
 var getBoards = function(owner, boardName) {

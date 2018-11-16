@@ -343,8 +343,8 @@ app.controller('ItemsCtrl', function($scope, $compile, $http, $state, user, chos
     
 
     $scope.submitEdit = function() {
-        console.log("HELOO");
-        $http.put("item?id=" + editID + "&name=" + $scope.editName + "&pic=" + $scope.editImgURL + "&desc=" + $scope.editTheDescription + "&link=" + $scope.editLink).then(function(response) {
+        var url = "item?id=" + editID + "&name=" + $scope.editName + "&pic=" + $scope.editImgURL + "&desc=" + $scope.editTheDescription + "&link=" + $scope.editLink;
+        $http.put(url).then(function(response) {
             console.log(response);
         });
         $scope.getAll();
