@@ -19,7 +19,7 @@ app.factory('user', function() {
     var getOwner = function() {
         var owner = sessionStorage.getItem('owner');
         if (owner) {
-            if (owner = 'true') {
+            if (owner === 'true') {
                 return true;
             }
         }
@@ -267,6 +267,7 @@ app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) 
 app.controller('ItemsCtrl', function($scope, $compile, $http, $state, user, chosenBoard) {
     var editID = "";
     console.log("in list.html");
+    console.log("is owner: " + user.getOwner());
 
     $scope.items = [];
     $scope.allItems = [];
@@ -345,6 +346,7 @@ app.controller('ItemsCtrl', function($scope, $compile, $http, $state, user, chos
     }
 
     $scope.isOwner = function() {
+        console.log("isOwner() output: " + user.getOwner());
         return user.getOwner();
     };
 
