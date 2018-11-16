@@ -181,7 +181,7 @@ app.controller('RegisterCtrl', function($scope, $http, $state, user) {
 
 });
 
-app.controller('SearchCtrl', function($scope, $http, $state, user) {
+app.controller('SearchCtrl', function($scope, $http, $state, user, chosenBoard) {
     console.log("in Search");
     user.reset();
 
@@ -208,6 +208,8 @@ app.controller('SearchCtrl', function($scope, $http, $state, user) {
     $scope.goToBoard = function() {
         console.log("goToBoard");
         console.log($scope.selectedBoard);
+        chosenBoard.setName($scope.selectedBoard.boardName);
+
         if ($scope.selectedBoard) {
             if ($scope.selectedBoard.settings.hasPassword) {
                 if ($("#password").val() !== $scope.selectedBoard.password) {
@@ -247,6 +249,15 @@ app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) 
         $scope.allBoards = response.data;
         console.log($scope.boards);
     });
+
+    $scope.refresh = function() {
+        console.log("refresh to url: " + url);
+        $http.get(url).then(function(response) {
+            $scope.boards = response.data;
+            $scope.allBoards = $scope.boards;
+            console.log(response.data);
+        });
+    };
 
     $("#filter").keyup(function() {
         $scope.boards = $scope.allBoards;
@@ -295,25 +306,33 @@ app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) 
             url: url,
             data: obj
         }).then(function(response) {
-            console.log("edit response: " + response);
+            console.log("edit response:");
+            console.log(response);
+            $scope.refresh();
+        }, function(error) {
+            console.log(error);
         });
-        // $scope.getAll();
         $scope.editBoardScreen = false;
         console.log("Board edit submit");
     };
+
+    $scope.cancelEdit = function() {
+        $scope.editBoardScreen = false;
+        console.log("Item edit cancel");
+    }
 
     $scope.delete = function(board) {
         console.log("delete");
         var id = board._id;
         console.log(board);
-        $.ajax({
-            url: 'board?id=' + id,
-            type: 'DELETE',
-            success: function(data) {
-                console.log("delete successful");
-            }
+        var url = 'board?id=' + id;
+        $http.delete(url).then(function(response) {
+            console.log("deleted");
+            console.log(response);
+            $scope.refresh();
+        }, function(error) {
+            console.log(error);
         });
-        // $scope.getAll();
     }
 
     $scope.addBoard = function() {
@@ -346,7 +365,6 @@ app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) 
         if (boardName && (!hasPassword || (hasPassword && password))) {
             console.log(boardName, hasPassword, password);
             $scope.add(boardName, hasPassword, password);
-            // $scope.getAll();
             $scope.clearFields();
             $scope.addBoardScreen = false;
             console.log("submit");
@@ -366,6 +384,7 @@ app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) 
             contentType: "application/json; charset=utf-8",
             success: function(data, textStatus) {
                 console.log(textStatus);
+                $scope.refresh();
             }
         });
     };
@@ -376,6 +395,7 @@ app.controller('ItemsCtrl', function($scope, $compile, $http, $state, user, chos
     var editID = "";
     console.log("in list.html");
     console.log("is owner: " + user.getOwner());
+    console.log("board: " + chosenBoard.getName());
 
     $scope.items = [];
     $scope.allItems = [];
@@ -517,5 +537,6 @@ app.controller('ItemsCtrl', function($scope, $compile, $http, $state, user, chos
         });
         $scope.getAll();
     };
+
     console.log(chosenBoard);
 });

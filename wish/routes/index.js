@@ -202,7 +202,7 @@ router.put('/board', function(req, res, next) {
         board.save(function(err, board) {
             if (err) { console.lot(err); }
             console.log(board);
-            res.status(200);
+            res.sendStatus(200);
         });
     })
     res.status(500);
@@ -213,10 +213,11 @@ router.delete('/board', function(req, res, next) {
     console.log(req.query.id);
 
     Board.findOne({ _id: req.query.id }).remove(function(err, removed) {
-        if (err) { console.log(err); return err; }
+        if (err) { console.log(err); }
+        console.log("deleted")
         console.log(removed);
+        res.sendStatus(200);
     });
-    res.status(200);
 });
 
 router.get('/item', function(req, res, next) {
@@ -247,11 +248,14 @@ router.delete('/item', function(req, res, next) {
     console.log("IN DELETE");
     console.log(req.query.id);
 
-    Item.findOne({ _id: req.query.id }).remove(function(err, removed) {
-        if (err) { console.log(err); return err; }
-        console.log(removed);
+    Item.findOne({ _id: req.query.id }).deleteOne(function(err, removed) {
+        if (err) { console.log(err); }
+        else {
+            console.log(removed);
+            res.sendStatus(200);
+        }
     });
-    res.status(200);
+
 });
 
 router.put('/item', function(req, res, next) {
