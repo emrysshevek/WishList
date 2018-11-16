@@ -181,7 +181,13 @@ router.get('/board', function(req, res, next) {
 });
 
 router.post('/board', function(req, res, next) {
-    console.log("In find");
+    console.log("In post board");
+    var newBoard = new Board(req.body);
+    newBoard.save(function(err, board) {
+        if (err) return console.error(err);
+        console.log(board);
+        res.sendStatus(200);
+    });
     res.status(200);
 });
 

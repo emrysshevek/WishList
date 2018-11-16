@@ -186,7 +186,8 @@ app.controller('SearchCtrl', function($scope, $http, $state, user) {
     user.reset();
 
     $scope.searchBoards = []
-    $scope.hasPassword = false;
+    // $scope.hasPassword = false;
+    $scope.password = "";
     $scope.selectedBoard;
 
     $scope.search = function() {
@@ -194,7 +195,6 @@ app.controller('SearchCtrl', function($scope, $http, $state, user) {
         var boardName = $("#boardName").val();
         if (owner || boardName) {
             var url = "/board?owner=" + owner + "&board=" + boardName;
-            console.log(url);
             $http({
                 method: "GET",
                 url: url,
@@ -209,19 +209,21 @@ app.controller('SearchCtrl', function($scope, $http, $state, user) {
         console.log("goToBoard");
         console.log($scope.selectedBoard);
         if ($scope.selectedBoard) {
-            if ($scope.hasPassword) {
-                if ($scope.password != $scope.selectedBoard.password) {
-                    $scope.password = "";
+            if ($scope.selectedBoard.settings.hasPassword) {
+                if ($("#password").val() !== $scope.selectedBoard.password) {
+                    $("#password").val("");
                 }
                 else {
                     user.setUsername($scope.selectedBoard.owner);
                     user.setOwner(false);
+                    $("#password").val("");
                     $state.go("items");
                 }
             }
             else {
                 user.setUsername($scope.selectedBoard.owner);
                 user.setOwner(false);
+                $("#password").val("");
                 $state.go("items");
             }
         }
@@ -229,6 +231,7 @@ app.controller('SearchCtrl', function($scope, $http, $state, user) {
 });
 
 app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) {
+    var editID = "";
     console.log("in home.html");
     console.log("user: " + user.getUsername() + " token: " + user.getToken());
     console.log("is owner: " + user.getOwner());
@@ -251,7 +254,12 @@ app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) 
     }
 
     $scope.edit = function(board) {
-        console.log("edit");
+        editID = board._id;
+        console.log(board);
+        $scope.editName = board.boardName;
+        $scope.editRequirePassword = board.settings.hasPassword;
+        $scope.editPassword = board.password;
+        $scope.editBoardScreen = true;
     }
 
     $scope.delete = function(board) {
@@ -282,16 +290,34 @@ app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) 
     };
 
     $scope.submitBoard = function() {
-        // var title = $("#name").val();
-        // var url = $("#url").val();
-        // var description = $("#theDescription").val();
-        // var link = $("#link").val();
-        // console.log(title, url, description, link);
-        // $scope.add(title, url, description, link);
-        // $scope.getAll();
-        $scope.clearFields();
-        $scope.addItemScreen = false;
-        console.log("submit");
+        var boardName = $("#name").val();
+        var hasPassword = $scope.requirePassword;
+        var password = $scope.password;
+        if (boardName && (!hasPassword || (hasPassword && password))) {
+            console.log(boardName, hasPassword, password);
+            $scope.add(boardName, hasPassword, password);
+            // $scope.getAll();
+            $scope.clearFields();
+            $scope.addBoardScreen = false;
+            console.log("submit");
+        }
+    };
+
+    $scope.add = function(name, hasPassword, password) {
+        console.log(name);
+        var myobj = { owner: user.getUsername(), boardName: name, password: password, settings: { hasPassword: hasPassword, hide: false }, items: [] };
+        var jobj = JSON.stringify(myobj);
+        $("#json").text(jobj);
+        var URL = "/board";
+        $.ajax({
+            url: URL,
+            type: "POST",
+            data: jobj,
+            contentType: "application/json; charset=utf-8",
+            success: function(data, textStatus) {
+                console.log(textStatus);
+            }
+        });
     };
 
 });
