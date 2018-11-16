@@ -132,6 +132,44 @@
     </script>
 
     <script type="text/ng-template" id="/boards.html">
+        <div class="addWrapper">
+            <div ng-show="addItemScreen" class="addItemScreen">
+                <div id="box">
+                    <div class="row justify-content-md-center">
+                        <div class="col-md-auto">
+                            <form id="registerForm">
+                                <h1 class="col">Add Item</h1>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="name" placeholder="name" ng-model="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="url" placeholder="image url" ng-model="imgURL">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="url" placeholder="description" ng-model="theDescription">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="url" placeholder="link" ng-model="link">
+                                </div>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-auto">
+                                        <button ng-click="submitItem()" id="submitButton" type="submit" class="btn btn-primary">Submit Item</button>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-auto">
+                                        <button ng-click="cancelItem()" id="cancelButton" type="submit" class="btn btn-primary">Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div id="page-mask" ng-show="addItemScreen"></div>
+        </div>
         <h1>MY WISH LISTS</h1>
         <div class="container">
             <div class="row justify-content-sm-center">
@@ -140,11 +178,6 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md overlay">
-                    <div class="boardForm">
-                        <h1>OVERLAY</h1>
-                    </div>
-                </div>
                 <div class="col-md">
                     <div class="container boardCard" ng-repeat="board in boards">
                         <div class="row justify-content-between align-items-center">
@@ -167,6 +200,44 @@
     </script>
 
     <script type="text/ng-template" id="/items.html">
+        <div class="addWrapper">
+            <div ng-show="addItemScreen" class="addItemScreen">
+                <div id="box">
+                    <div class="row justify-content-md-center">
+                        <div class="col-md-auto">
+                            <form id="registerForm">
+                                <h1 class="col">Add Item</h1>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="name" placeholder="name" ng-model="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="url" placeholder="image url" ng-model="imgURL">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="url" placeholder="description" ng-model="theDescription">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="url" placeholder="link" ng-model="link">
+                                </div>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-auto">
+                                        <button ng-click="submitItem()" id="submitButton" type="submit" class="btn btn-primary">Submit Item</button>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-auto">
+                                        <button ng-click="cancelItem()" id="cancelButton" type="submit" class="btn btn-primary">Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div id="page-mask" ng-show="addItemScreen"></div>
+        </div>
         <h1>LIST NAME</h1>
         <div class="container">
             <div class="row justify-content-sm-center">
@@ -178,13 +249,19 @@
                 <div class="col-md">
                     <div class="container boardCard">
                         <div class="row justify-content-between align-items-center">
-                            <div class="col-lg boardTitle" ng-click="">
+                            <div class="col-lg itemTitle">
                                 <h5>ITEM 1</h5>
+                            </div>
+                            <div class="col-auto" ng-if="isOwner()">
+                                <small ng-click="edit(item)" class="text-muted boardSetting">edit</small><small class="text-muted"> | </small><small ng-click="delete(item)" class="text-muted boardSetting">delete</small>
                             </div>
                         </div>
                     </div>
+                    <br>
+                    <button ng-click="addItem()" id="addItem" type="submit" class="btn btn-primary">Add Item</button>
                 </div>
             </div>
+        </div>
         </div>
     </script>
 

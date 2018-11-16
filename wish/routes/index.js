@@ -37,15 +37,15 @@ db.once('open', function() { //Lets us know when we're connected
     console.log('Connected');
 });
 
-var testUser = new User({ username: "test", password: "test", boards: ["testboard1", 'testboard2'] });
-var testBoard = new Board({ owner: "test", boardName: "testboard1", password: "password", settings: { hasPassword: true, hide: false }, items: ["board1item1", 'board1item2'] });
-var testItem = new Item({
-    board: "board1",
-    picture: "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwiVorvBq8reAhWnllQKHeM0Bq4QjRx6BAgBEAU&url=https%3A%2F%2Fwww.today.com%2Ffood%2Fskittles-myth-are-red-yellow-green-all-same-flavor-t121718&psig=AOvVaw2EThyNk-P3XlXnMtIbhzYT&ust=1541956970724424",
-    title: "skittles",
-    description: "yummy test candy",
-    link: "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwiVorvBq8reAhWnllQKHeM0Bq4Qjhx6BAgBEAM&url=https%3A%2F%2Fwww.today.com%2Ffood%2Fskittles-myth-are-red-yellow-green-all-same-flavor-t121718&psig=AOvVaw2EThyNk-P3XlXnMtIbhzYT&ust=1541956970724424"
-});
+// var testUser = new User({ username: "masonfp", password: "password", boards: ["board1"] });
+// var testBoard = new Board({ owner: "masonfp", boardName: "board1", password: "password", settings: { hasPassword: true, hide: false }, items: ["item1"] });
+// var testItem = new Item({
+//     board: "board1",
+//     picture: "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwiVorvBq8reAhWnllQKHeM0Bq4QjRx6BAgBEAU&url=https%3A%2F%2Fwww.today.com%2Ffood%2Fskittles-myth-are-red-yellow-green-all-same-flavor-t121718&psig=AOvVaw2EThyNk-P3XlXnMtIbhzYT&ust=1541956970724424",
+//     title: "skittles",
+//     description: "yummy test candy",
+//     link: "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwiVorvBq8reAhWnllQKHeM0Bq4Qjhx6BAgBEAM&url=https%3A%2F%2Fwww.today.com%2Ffood%2Fskittles-myth-are-red-yellow-green-all-same-flavor-t121718&psig=AOvVaw2EThyNk-P3XlXnMtIbhzYT&ust=1541956970724424"
+// });
 
 // testUser.save(function(err, user) {
 //     if (err) return console.error(err);
@@ -195,22 +195,28 @@ router.delete('/board', function(req, res, next) {
 });
 
 router.get('/item', function(req, res, next) {
-    console.log("In find");
+    console.log("In get item");
     res.status(200);
 });
 
 router.post('/item', function(req, res, next) {
-    console.log("In find");
-    res.status(200);
+    console.log("In post item");
+    var newItem = new Item(req.body);
+    console.log(newItem);
+    newItem.save(function(err, post) {
+        if (err) return console.error(err);
+        console.log(post);
+        res.sendStatus(200);
+    });
 });
 
 router.delete('/item', function(req, res, next) {
-    console.log("In find");
+    console.log("In delete item");
     res.status(200);
 });
 
 router.put('/item', function(req, res, next) {
-    console.log("In find");
+    console.log("In put item");
     res.status(200);
 });
 

@@ -1,29 +1,75 @@
 var app = angular.module('app', ['ui.router']);
 
 app.factory('user', function() {
-    var username = '';
-    var token = '';
-    var owner = false;
+    var getUsername = function() {
+        var username = sessionStorage.getItem('username');
+        if (!username) {
+            username = "";
+        }
+        return username;
+
+    }
+    var getToken = function() {
+        var token = sessionStorage.getItem('token');
+        if (!token) {
+            token = ""
+        }
+        return token;
+    }
+    var getOwner = function() {
+        var owner = sessionStorage.getItem('owner');
+        if (owner) {
+            if (owner = 'true') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    var setUsername = function(username) {
+        sessionStorage.setItem('username', username.toString());
+    }
+    var setToken = function(token) {
+        sessionStorage.setItem('token', token.toString());
+    }
+    var setOwner = function(owner) {
+        sessionStorage.setItem('owner', owner.toString());
+    }
 
     var reset = function() {
-        username = '';
-        token = '';
-        owner = false;
+        sessionStorage.setItem('username', "");
+        sessionStorage.setItem('token', "");
+        sessionStorage.setItem('owner', "false");
     }
 
     return {
-        username: username,
-        token: token,
-        owner: owner,
+        getUsername: getUsername,
+        getToken: getToken,
+        getOwner: getOwner,
+        setUsername: setUsername,
+        setToken: setToken,
+        setOwner: setOwner,
         reset: reset
     }
 });
 
 app.factory('chosenBoard', function() {
-    var boardName = '';
+    var getName = function() {
+        var name = sessionStorage.getItem('chosenBoard');
+        if (!name) {
+            name = "";
+        }
+        return name;
+    }
+
+    var setName = function(name) {
+        sessionStorage.setItem('chosenBoard', name);
+    }
+
 
     return {
-        name: boardName,
+        getName: getName,
+        setName: setName
     }
 })
 
@@ -45,6 +91,7 @@ app.config([
                 url: '/search',
                 templateUrl: '/search.html',
                 controller: 'SearchCtrl'
+
             }).state('boards', {
                 url: '/boards',
                 templateUrl: '/boards.html',
@@ -83,9 +130,9 @@ app.controller('LoginCtrl', function($scope, $http, $window, $location, $state, 
                 }
                 else {
                     console.log(response.data.token);
-                    user.username = username;
-                    user.token = response.data.token;
-                    user.owner = true;
+                    user.setUsername(username);
+                    user.setToken(response.data.token);
+                    user.setOwner(true);
                     $state.go('boards');
                 }
             });
@@ -93,8 +140,7 @@ app.controller('LoginCtrl', function($scope, $http, $window, $location, $state, 
             $("#password").val("");
 
         }
-    }
-
+    };
 });
 
 app.controller('RegisterCtrl', function($scope, $http, user) {
@@ -122,9 +168,9 @@ app.controller('RegisterCtrl', function($scope, $http, user) {
                 }
                 else {
                     console.log(response.data.token);
-                    user.username = username;
-                    user.token = response.data.token;
-                    user.owner = true;
+                    user.setUsername(username);
+                    user.setToken(response.data.token);
+                    user.setOwner(true);
                 }
             });
             $("#username").val("");
@@ -167,30 +213,29 @@ app.controller('SearchCtrl', function($scope, $http, $state, user) {
                     $scope.password = "";
                 }
                 else {
-                    user.username = $scope.selectedBoard.owner;
-                    user.owner = false;
+                    user.setUsername($scope.selectedBoard.owner);
+                    user.setOwner(false);
                     $state.go("items");
                 }
             }
             else {
-                user.username = $scope.selectedBoard.owner;
-                user.owner = false;
+                user.setUsername($scope.selectedBoard.owner);
+                user.setOwner(false);
                 $state.go("items");
             }
         }
     }
-
 });
 
 app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) {
     console.log("in home.html");
-    console.log("user: " + user.username + " token: " + user.token);
-    console.log("is owner: " + user.owner);
+    console.log("user: " + user.getUsername() + " token: " + user.getToken());
+    console.log("is owner: " + user.getOwner());
 
     $scope.boards = [];
-    $scope.isOwner = user.owner;
+    $scope.isOwner = user.getOwner();
 
-    var url = "/board?owner=" + user.username;
+    var url = "/board?owner=" + user.getUsername();
 
     $http.get(url).then(function(response) {
         $scope.boards = response.data;
@@ -200,7 +245,7 @@ app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) 
     $scope.goToBoard = function(board) {
         console.log(board);
         console.log("go to board");
-        chosenBoard.name = board.boardName;
+        chosenBoard.setName(board.boardName);
         $state.go('items')
     }
 
@@ -213,13 +258,85 @@ app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) 
     }
 
     $scope.addBoard = function() {
+        $scope.addItemScreen = true;
         console.log("add board");
-        $(".overlay").show();
     }
 
 });
 
 app.controller('ItemsCtrl', function($scope, $http, $state, user, chosenBoard) {
     console.log("in list.html");
+
+    $scope.addItem = function() {
+        $scope.addItemScreen = true;
+        console.log("addItem");
+    }
+
+    $scope.clearFields = function() {
+        console.log("clear");
+        $scope.name = null;
+        $scope.imgURL = null;
+        $scope.theDescription = null;
+        $scope.link = null;
+        console.log("addItem");
+    }
+
+    $scope.submitItem = function() {
+        var title = $("#name").val();
+        var url = $("#url").val();
+        $scope.add(title, url);
+        //$scope.get();
+        $scope.clearFields();
+        $scope.addItemScreen = false;
+        console.log("submit");
+    }
+
+    $scope.cancelItem = function() {
+        $scope.addItemScreen = false;
+        $scope.clearFields();
+        console.log("cancel");
+    }
+
+    $scope.get = function() {
+        // $.getJSON('comment/all', function(data) {
+        //     console.log(data);
+        //     var everything = "<ul>";
+        //     for (var comment in data) {
+        //         var com = data[comment];
+        //         everything += "<li> Name: " + com.Name + " -- Comment: " + com.Comment + "</li>";
+        //     }
+        //     everything += "</ul>";
+        //     $("#comments").html(everything);
+        // });
+    }
+
+    $scope.isOwner = function() {
+        return user.getOwner();
+    }
+
+    $scope.add = function(title, url, description, link) {
+        var myobj = { chosenBoard, picture: url, title: title, description: description, link: link, boolean: true };
+        var jobj = JSON.stringify(myobj);
+        $("#json").text(jobj);
+        var url = "item";
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: jobj,
+            contentType: "application/json; charset=utf-8",
+            success: function(data, textStatus) {
+                console.log(textStatus);
+            }
+        });
+    }
+
+    $scope.edit = function(item) {
+        console.log("Item edit");
+    }
+
+    $scope.delete = function(item) {
+        console.log(" Item delete");
+
+    }
     console.log(chosenBoard);
 });
