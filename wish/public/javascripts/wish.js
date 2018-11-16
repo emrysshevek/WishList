@@ -348,6 +348,10 @@ app.controller('ItemsCtrl', function($scope, $compile, $http, $state, user, chos
         return user.getOwner();
     };
 
+    $scope.notOwner = function() {
+        return !$scope.isOwner();
+    };
+
     $scope.add = function(title, url, description, theLink) {
         console.log(chosenBoard.getName());
         var myobj = { board: chosenBoard.getName(), picture: url, title: title, theDescription: description, link: theLink, boolean: true };

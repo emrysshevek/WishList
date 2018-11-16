@@ -140,7 +140,7 @@
                             <form id="registerForm">
                                 <h1 class="col">Add Item</h1>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="name" placeholder="name" ng-model="name" required>
+                                    <input type="text" class="form-control" id="name" placeholder="name" ng-model="name">
                                 </div>
                                 <div class="form-group">
                                     <input type="text" class="form-control" id="url" placeholder="image url" ng-model="imgURL">
@@ -290,14 +290,14 @@
                             <div class="col-lg itemTitle">
                                 <h3><a href="{{item.link}}">{{item.title}}</a></h3>
                                 <p>{{item.theDescription}}</p>
-                                <div><h5>Reserved:</h5>
+                                <div ng-if="notOwner()"><h5>Reserved:</h5>
                                 <label class="switch">
                                     <input type="checkbox">
                                     <span class="slider round"></span>
                                 </label>
                                 </div>
                             </div>
-                            <div class="col-auto" ng-if=isOwner()>
+                            <div class="col-auto" ng-if="isOwner()">
                                 <small ng-click="edit(item)" class="text-muted boardSetting">edit</small><small class="text-muted"> | </small><small ng-click="delete(item)" class="text-muted boardSetting">delete</small>
                             </div>
                         </div>
