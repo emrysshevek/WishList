@@ -1,29 +1,75 @@
 var app = angular.module('app', ['ui.router']);
 
 app.factory('user', function() {
-    var username = '';
-    var token = '';
-    var owner = false;
+    var getUsername = function() {
+        var username = sessionStorage.getItem('username');
+        if (!username) {
+            username = "";
+        }
+        return username;
+
+    }
+    var getToken = function() {
+        var token = sessionStorage.getItem('token');
+        if (!token) {
+            token = ""
+        }
+        return token;
+    }
+    var getOwner = function() {
+        var owner = sessionStorage.getItem('owner');
+        if (owner) {
+            if (owner = 'true') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    var setUsername = function(username) {
+        sessionStorage.setItem('username', username.toString());
+    }
+    var setToken = function(token) {
+        sessionStorage.setItem('token', token.toString());
+    }
+    var setOwner = function(owner) {
+        sessionStorage.setItem('owner', owner.toString());
+    }
 
     var reset = function() {
-        username = '';
-        token = '';
-        owner = false;
+        sessionStorage.setItem('username', "");
+        sessionStorage.setItem('token', "");
+        sessionStorage.setItem('owner', "false");
     }
 
     return {
-        username: username,
-        token: token,
-        owner: owner,
+        getUsername: getUsername,
+        getToken: getToken,
+        getOwner: getOwner,
+        setUsername: setUsername,
+        setToken: setToken,
+        setOwner: setOwner,
         reset: reset
     }
 });
 
 app.factory('chosenBoard', function() {
-    var boardName = '';
+    var getName = function() {
+        var name = sessionStorage.getItem('chosenBoard');
+        if (!name) {
+            name = "";
+        }
+        return name;
+    }
+
+    var setName = function(name) {
+        sessionStorage.setItem('chosenBoard', name);
+    }
+
 
     return {
-        name: boardName,
+        getName: getName,
+        setName: setName
     }
 })
 
@@ -84,9 +130,9 @@ app.controller('LoginCtrl', function($scope, $http, $window, $location, $state, 
                 }
                 else {
                     console.log(response.data.token);
-                    user.username = username;
-                    user.token = response.data.token;
-                    user.owner = true;
+                    user.setUsername(username);
+                    user.setToken(response.data.token);
+                    user.setOwner(true);
                     $state.go('boards');
                 }
             });
@@ -97,14 +143,15 @@ app.controller('LoginCtrl', function($scope, $http, $window, $location, $state, 
     };
 });
 
-app.controller('RegisterCtrl', function($scope, $http) {
+app.controller('RegisterCtrl', function($scope, $http, user) {
     console.log("in register");
+    user.reset();
 
     $scope.register = function() {
         var username = $("#username").val();
         var password = $("#password").val();
-        if (username && password) {
 
+        if (username && password) {
             var request = { username: $("#username").val(), password: $("#password").val() };
             console.log(request);
             var url = "/register";
@@ -121,6 +168,9 @@ app.controller('RegisterCtrl', function($scope, $http) {
                 }
                 else {
                     console.log(response.data.token);
+                    user.setUsername(username);
+                    user.setToken(response.data.token);
+                    user.setOwner(true);
                 }
             });
             $("#username").val("");
@@ -130,10 +180,13 @@ app.controller('RegisterCtrl', function($scope, $http) {
 
 });
 
-app.controller('SearchCtrl', function($scope, $http) {
+app.controller('SearchCtrl', function($scope, $http, $state, user) {
     console.log("in Search");
+    user.reset();
 
     $scope.searchBoards = []
+    $scope.hasPassword = false;
+    $scope.selectedBoard;
 
     $scope.search = function() {
         var owner = $("#username").val();
@@ -150,15 +203,39 @@ app.controller('SearchCtrl', function($scope, $http) {
             });
         }
     }
+
+    $scope.goToBoard = function() {
+        console.log("goToBoard");
+        console.log($scope.selectedBoard);
+        if ($scope.selectedBoard) {
+            if ($scope.hasPassword) {
+                if ($scope.password != $scope.selectedBoard.password) {
+                    $scope.password = "";
+                }
+                else {
+                    user.setUsername($scope.selectedBoard.owner);
+                    user.setOwner(false);
+                    $state.go("items");
+                }
+            }
+            else {
+                user.setUsername($scope.selectedBoard.owner);
+                user.setOwner(false);
+                $state.go("items");
+            }
+        }
+    }
 });
 
 app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) {
     console.log("in home.html");
-    console.log("user: " + user.username + " token: " + user.token);
-    console.log("is owner: " + user.owner);
-    $scope.boards = [];
+    console.log("user: " + user.getUsername() + " token: " + user.getToken());
+    console.log("is owner: " + user.getOwner());
 
-    var url = "/board?owner=" + user.username;
+    $scope.boards = [];
+    $scope.isOwner = user.getOwner();
+
+    var url = "/board?owner=" + user.getUsername();
 
     $http.get(url).then(function(response) {
         $scope.boards = response.data;
@@ -168,7 +245,7 @@ app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) 
     $scope.goToBoard = function(board) {
         console.log(board);
         console.log("go to board");
-        chosenBoard.name = board.boardName;
+        chosenBoard.setName(board.boardName);
         $state.go('items')
     }
 
@@ -180,19 +257,26 @@ app.controller('BoardsCtrl', function($scope, $http, $state, user, chosenBoard) 
         console.log("delete");
     }
 
+    $scope.addBoard = function() {
+        $scope.addItemScreen = true;
+        console.log("add board");
+    }
+
 });
 
 app.controller('ItemsCtrl', function($scope, $compile, $http, $state, user, chosenBoard) {
     var editID = "";
     console.log("in list.html");
-    $scope.items = [];
-    $scope.boardName = chosenBoard.name;
 
-    var url = "/item?board=" + chosenBoard.name;
+    $scope.items = [];
+    $scope.boardName = chosenBoard.getName();
+
+    var url = "/item?board=" + chosenBoard.getName();
 
     $scope.getAll = function() {
         $http.get(url).then(function(response) {
             $scope.items = response.data;
+            console.log(response.data);
         });
     };
 
@@ -201,6 +285,7 @@ app.controller('ItemsCtrl', function($scope, $compile, $http, $state, user, chos
     $scope.addItem = function() {
         $scope.addItemScreen = true;
         console.log("addItem");
+
     };
 
     $scope.clearFields = function() {
@@ -232,16 +317,16 @@ app.controller('ItemsCtrl', function($scope, $compile, $http, $state, user, chos
     };
 
     $scope.get = function() {
-        $http.get('item/:' + chosenBoard + query, function(data) {});
+        $http.get('item/:' + chosenBoard.getName() + query, function(data) {});
     }
 
     $scope.isOwner = function() {
-        return user;
+        return user.getOwner();
     };
 
     $scope.add = function(title, url, description, theLink) {
-        console.log(chosenBoard.name);
-        var myobj = { board: chosenBoard.name, picture: url, title: title, theDescription: description, link: theLink, boolean: true };
+        console.log(chosenBoard.getName());
+        var myobj = { board: chosenBoard.getName(), picture: url, title: title, theDescription: description, link: theLink, boolean: true };
         var jobj = JSON.stringify(myobj);
         $("#json").text(jobj);
         var URL = "item";
@@ -271,7 +356,7 @@ app.controller('ItemsCtrl', function($scope, $compile, $http, $state, user, chos
         $scope.editItemScreen = false;
         console.log("Item edit cancel");
     }
-    
+
     $scope.edit = function(item) {
         editID = item._id;
         console.log(item);

@@ -64,6 +64,7 @@ db.once('open', function() { //Lets us know when we're connected
 router.get('/', function(req, res, next) {
     console.log("Sending main page");
     res.sendFile('main.html', { root: 'public' });
+
 });
 
 // /* GET home page.*/

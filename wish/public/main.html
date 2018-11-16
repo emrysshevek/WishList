@@ -102,13 +102,15 @@
                     </div>
                     <div class="form-group">
                         <label for="exampleFormControlSelect2">Select a board</label>
-                        <select multiple class="form-control" id="exampleFormControlSelect2">
-                            <option ng-repeat="board in searchBoards">{{board.owner}}: {{board.boardName}}</option>
+                        <select ng-model="selectedBoard" ng-options="board as board.boardName for board in searchBoards" class="form-control" id="filteredBoards">
                          </select>
+                    </div>
+                    <div ng-if="hasPassword" class="form-group">
+                        <input ng-model="password" type="password" class="form-control is-valid" id="password" placeholder="enter password" required>
                     </div>
                     <div class="row justify-content-md-center">
                         <div class="col-auto">
-                            <button ng-click="search()" id="searchButton" type="submit" class="btn btn-primary">look up</button>
+                            <button ng-click="goToBoard()" id="searchButton" type="submit" class="btn btn-primary">look up</button>
                         </div>
                     </div>
                     <div class="row justify-content-md-center">
@@ -130,11 +132,49 @@
     </script>
 
     <script type="text/ng-template" id="/boards.html">
+        <div class="addWrapper">
+            <div ng-show="addItemScreen" class="addItemScreen">
+                <div id="box">
+                    <div class="row justify-content-md-center">
+                        <div class="col-md-auto">
+                            <form id="registerForm">
+                                <h1 class="col">Add Item</h1>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="name" placeholder="name" ng-model="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="url" placeholder="image url" ng-model="imgURL">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="url" placeholder="description" ng-model="theDescription">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="url" placeholder="link" ng-model="link">
+                                </div>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-auto">
+                                        <button ng-click="submitItem()" id="submitButton" type="submit" class="btn btn-primary">Submit Item</button>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-auto">
+                                        <button ng-click="cancelItem()" id="cancelButton" type="submit" class="btn btn-primary">Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div id="page-mask" ng-show="addItemScreen"></div>
+        </div>
         <h1>MY WISH LISTS</h1>
         <div class="container">
             <div class="row justify-content-sm-center">
                 <div class="col-sm">
-                    <input class="form-control form-control-sm" type="text" placeholder="filter boards">
+                    <input class="form-control form-control-sm" type="text" placeholder="filter lists">
                 </div>
             </div>
             <div class="row">
@@ -149,6 +189,11 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="row justify-content-md-center">
+                <div class="col-auto">
+                    <h6 class="add" ng-click="addBoard()">&plus; add list</h6>
                 </div>
             </div>
         </div>
